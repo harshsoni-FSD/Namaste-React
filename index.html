@@ -3,46 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="./index.css" />
     <title>Document</title>
 </head>
 <body>
-    <h1>Hello Below of Root</h1> <!--this is working fine here react is not apply -->
     <div id="root">
-    <h1>Aksay is here! </h1>   <!--this is replced by parent -->
+        <h1>Not Rendering</h1>
     </div>
-   <h1>Hello Below of Root</h1>   <!--this is working fine here react is not apply -->
-    <!-- <script>
-        const heading1=document.createElement("h1");
-        heading1.innerHTML("hi I am back again");
-        const root1=document.getElementById("root");
-        root1.appendChild(heading1);
-
-    </script> -->
-    
-<!-- <h1>Hello World</h1> -->
- <!-- we use javascript -->
-  <!-- <script>
-    const heading =document.createElement("h1"); //creating h1 tag
-    heading.innerHTML="Hello World jS";
-
-//lets first find the root 
-    const root=document.getElementById("root")
-    
-    //now put h1 inside the root
-    //now put heading inside the div
-    root.appendChild(heading);
-  </script> -->
-
-  <!-- //using react// -->
- <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>   <!--core file of react written in js -->
-<script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>  <!-- this is react library usefull for dom operation -->
- <!-- this dom act as bridge between browser and react -->
-
-   
-<script src="./App.js"></script> 
-<!-- sequence shoud matter and If i place this line about react script it will thorugh
-error "React is not defined" because app.js is using the react so that is why have put it below react -->
-
+<script type="module" src="./src/App.js"></script>
 </body>
 </html>
