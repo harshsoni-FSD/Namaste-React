@@ -1,13 +1,18 @@
-import RestaurantCard from "./RestaurantCard";
+import RestaurantCard ,{withPromotedLabel} from "./RestaurantCard";
 //import resList from "../utils/mockData";
 import Shimmer from "./Shimmer";
 import React from "react";
-import { useEffect, useState } from "react";
-
+import { useEffect, useState,useContext } from "react";
+import { Link } from "react-router-dom";
+import useOnlineStatus from "../utils/useOnlineStatus";
+import UserContext from "../utils/UserContext";
 const Body=()=>{
     const [searchText,setSearchText]=useState("");
     const [listOfRestaurant,setListOfRestaurant] = useState([]);
     const [filteredRestaurant,setFilteredRestaurant]= useState([]);
+    console.log(listOfRestaurant);
+
+    const RestaurantCardPromoted= withPromotedLabel(RestaurantCard);
     useEffect(()=>{
         fetchData();
     },[])
@@ -103,33 +108,61 @@ const Body=()=>{
  const result=await response.json();
     
    }
+   const onlineStatus = useOnlineStatus();
+   if(onlineStatus === false){
+    return (
+        <h1>
+            Looks like you are offline!! Please check your internet connection;
+        </h1>
+    )
+   }
+   const {loggedInUser, setUserName } =useContext(UserContext);
     return listOfRestaurant.length===0?<Shimmer/>:(
         <div className="body">
-            <div className="filter">
-                <button className="filter-btn" onClick={()=>{
-                    const filteredData=listOfRestaurant.filter((res)=> res.card.card.info.avgRating > 4);
-                    setFilteredRestaurant(filteredData);
-                }}
-                   >Top Rated Restaurants</button> 
-            </div>  
-            <div className="search">
-            <input type="text" className="search-bar" value={searchText} onChange={(e)=>setSearchText(e.target.value)}/>
-            <button  onClick={()=>{
+            <div className="filter flex">
+            <div className="search m-4 p-4">
+            <input type="text" data-testid="searchInput"
+            className="border border-solid border-black" value={searchText} onChange={(e)=>setSearchText(e.target.value)}/>
+            <button className="px-4 py-2 bg-green-100 m-4 rounded-lg" onClick={()=>{
                 //filter the restaurant and update the Ui
               const filteredRestaurant= listOfRestaurant.filter((res)=>res.card.card.info.name.toLowerCase().includes(searchText.toLowerCase()));
               setFilteredRestaurant(filteredRestaurant);
             }}>Search</button>  
             <button onClick={()=>{postData}}></button>  
             </div>
+            <div className="search m-4 p-4 flex items-center">
+           
+            <button className="px-4 py-2 bg-gray-100 rounded-lg" onClick={()=>{
+                    const filteredData=listOfRestaurant.filter((res)=> res.card.card.info.avgRating > 4.4);
+                    setFilteredRestaurant(filteredData);
+                }}
+                   >Top Rated Restaurants</button> 
+            </div>
+            <div className="search m-4 p-4 flex items-center">
+                <label>UserName : </label>
+                <input type="text" className="border border-black p-2 mx-1" value={loggedInUser} onChange={(e)=>setUserName(e.target.value)}/>
+            </div>
+
+               
+            </div>  
+           
             
-            <div className="res-container">
+            <div className="flex flex-wrap">
                 {
                    filteredRestaurant.map((restaurant)=>( 
-                    <RestaurantCard key={restaurant.card.card.info.id} resData={restaurant}/>
+                   <Link
+                   key={restaurant.card.card.info.id}
+                    to={"/restaurants/"+restaurant.card.card.info.id}> 
+                  {/* if the restaurant is promoted then add a promoted label to it  /** */ }
+                    {restaurant.card.card.info.promoted?<RestaurantCardPromoted resData={restaurant}/>:<RestaurantCard  resData={restaurant}/>}
+                    </Link>
+
                 ))
                 }
             </div>
         </div>
     )
 }
+
+
 export default Body;

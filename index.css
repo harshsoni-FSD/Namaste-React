@@ -1,4 +1,6 @@
-.header{
+@import "tailwindcss";
+
+/* .header{
     display: flex;
     justify-content: space-between;
     border: 1px solid black;
@@ -66,3 +68,7 @@ width: 100px;
 .filter{
     display: flex;
 }
+.user-card{
+    padding: Dehradun;
+    border: 1px solid black;
+}  */
